@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - UPSC Portal</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">UPSC Portal</div>
+        <div class="nav-user">
+            <span id="userName"></span>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <ul class="menu">
+                <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                <li><a href="current-affairs.html">Current Affairs</a></li>
+                <li><a href="quiz.html">Daily Quiz</a></li>
+                <li><a href="test.html">Mock Tests</a></li>
+                <li><a href="study-material.html">Study Material</a></li>
+                <li><a href="progress.html">My Progress</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <h1>Welcome, <span id="userNameMain"></span>!</h1>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Questions</h3>
+                    <p class="stat-number" id="totalQuestions">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Accuracy</h3>
+                    <p class="stat-number" id="accuracy">0%</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Tests Taken</h3>
+                    <p class="stat-number" id="testsTaken">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Study Hours</h3>
+                    <p class="stat-number" id="studyHours">0</p>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="action-grid">
+                    <a href="quiz.html" class="action-card">
+                        <h3>📝 Daily Quiz</h3>
+                        <p>Test your knowledge</p>
+                    </a>
+                    <a href="current-affairs.html" class="action-card">
+                        <h3>📰 Current Affairs</h3>
+                        <p>Stay updated</p>
+                    </a>
+                    <a href="test.html" class="action-card">
+                        <h3>📊 Mock Test</h3>
+                        <p>Practice full test</p>
+                    </a>
+                    <a href="study-material.html" class="action-card">
+                        <h3>📚 Study Material</h3>
+                        <p>Access resources</p>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Check authentication
+        const user = JSON.parse(localStorage.getItem('upscUser'));
+        if (!user) {
+            window.location.href = 'index.html';
+        }
+
+        document.getElementById('userName').textContent = user.name;
+        document.getElementById('userNameMain').textContent = user.name;
+
+        function logout() {
+            localStorage.removeItem('upscUser');
+            window.location.href = 'index.html';
+        }
+
+        // Load stats
+        google.script.run
+            .withSuccessHandler((stats) => {
+                document.getElementById('totalQuestions').textContent = stats.totalAttempted;
+                document.getElementById('accuracy').textContent = stats.accuracy + '%';
+                document.getElementById('studyHours').textContent = Math.floor(stats.totalTime / 60);
+            })
+            .getOverallStats(user.userId);
+    </script>
+</body>
+</html>
