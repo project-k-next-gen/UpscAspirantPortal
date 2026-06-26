@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Quiz - UPSC Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">UPSC Portal</div>
+        <div class="nav-user">
+            <span id="userName"></span>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>Daily Quiz</h1>
+            <div class="quiz-info">
+                <span>Question: <span id="currentQ">1</span>/<span id="totalQ">10</span></span>
+                <span>Time: <span id="timer">00:00</span></span>
+            </div>
+        </div>
+
+        <div id="quizContent">
+            <div class="question-box">
+                <h3 id="questionText">Loading question...</h3>
+                <div class="options" id="optionsContainer"></div>
+            </div>
+            
+            <div class="quiz-controls">
+                <button onclick="previousQuestion()" id="prevBtn">Previous</button>
+                <button onclick="nextQuestion()" id="nextBtn">Next</button>
+                <button onclick="submitQuiz()" id="submitBtn" style="display:none;">Submit</button>
+            </div>
+        </div>
+
+        <div id="resultSection" style="display:none;">
+            <h2>Quiz Completed!</h2>
+            <div class="result-stats">
+                <p>Score: <span id="finalScore"></span></p>
+                <p>Correct: <span id="correctAns"></span></p>
+                <p>Wrong: <span id="wrongAns"></span></p>
+                <p>Accuracy: <span id="accuracyPer"></span>%</p>
+            </div>
+            <button onclick="location.reload()">Retry</button>
+            <button onclick="location.href='dashboard.html'">Dashboard</button>
+        </div>
+    </div>
+
+    <script src="js/quiz.js"></script>
+</body>
+</html>
