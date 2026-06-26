@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPSC Portal - Login</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <h1>UPSC Aspirant Portal</h1>
+            <p class="subtitle">Your Journey to Civil Services</p>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="userId">User ID</label>
+                    <input type="text" id="userId" required placeholder="Enter User ID">
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required placeholder="Enter Password">
+                </div>
+                
+                <button type="submit" id="loginBtn">Login</button>
+                <div id="errorMsg" class="error"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Replace with your Google Apps Script Web App URL
+        const API_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL';
+        
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const userId = document.getElementById('userId').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMsg');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            loginBtn.textContent = 'Logging in...';
+            loginBtn.disabled = true;
+            
+            try {
+                const response = await google.script.run
+                    .withSuccessHandler((result) => {
+                        if (result.success) {
+                            // Store user data in localStorage
+                            localStorage.setItem('upscUser', JSON.stringify(result.user));
+                            window.location.href = 'dashboard.html';
+                        } else {
+                            errorMsg.textContent = result.message;
+                            loginBtn.textContent = 'Login';
+                            loginBtn.disabled = false;
+                        }
+                    })
+                    .withFailureHandler((error) => {
+                        errorMsg.textContent = 'Login failed. Please try again.';
+                        loginBtn.textContent = 'Login';
+                        loginBtn.disabled = false;
+                    })
+                    .authenticateUser(userId, password);
+            } catch (error) {
+                errorMsg.textContent = 'An error occurred. Please try again.';
+                loginBtn.textContent = 'Login';
+                loginBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
